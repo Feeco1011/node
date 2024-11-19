@@ -23,7 +23,7 @@ router.get('/', authenticate, async function (req, res) {
 
   // 檢查是否為授權會員，只有授權會員可以存取自己的資料
   if (req.user.id !== id) {
-    return res.json({ status: 'error', message: '存取會員資料失敗,id未找到' })
+    return res.json({ status: 'error', message: '存取會員資料失敗' })
   }
 
   const [rows] = await db.query('SELECT * FROM m_data WHERE m_id= ?', [id])
@@ -147,12 +147,11 @@ router.put('/', authenticate, async (req, res, next) => {
     // 密碼要先經過bcrypt編碼
     const passwordHash = await generateHash(updateMember.password)
     result = await db.query(
-      'UPDATE `m_data` SET `m_name`=?,`m_password`=?,`m_email`,`m_phone`=?, m_sex`=?  WHERE `m_id`=?;',
+      'UPDATE `m_data` SET `m_name`=?,`m_password`=?,`m_phone`=?, m_sex`=?  WHERE `m_id`=?;',
 
       [
         updateMember.name,
         passwordHash,
-        updateMember.email,
         updateMember.phone,
         Number(updateMember.sex),
         id,
@@ -160,14 +159,8 @@ router.put('/', authenticate, async (req, res, next) => {
     )
   } else {
     result = await db.query(
-      'UPDATE `m_data` SET `m_name`=?,`m_email`=?,`m_phone`=? ,`m_sex`=?  WHERE `m_id`=?;',
-      [
-        updateMember.name,
-        updateMember.email,
-        updateMember.phone,
-        Number(updateMember.sex),
-        id,
-      ]
+      'UPDATE `m_data` SET `m_name`=?,`m_phone`=? ,`m_sex`=?  WHERE `m_id`=?;',
+      [updateMember.name, updateMember.phone, Number(updateMember.sex), id]
     )
   }
 
