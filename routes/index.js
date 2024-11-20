@@ -8,6 +8,7 @@ import citypostsRouter from './cityposts.js'
 import ctRouter from './ct.js'
 import goodRouter from './good.js'
 import ct_goodRouter from './ct_good.js'
+import hotelsRouter from './hotels.js'
 
 const router = express.Router()
 const app = express()
@@ -29,3 +30,4 @@ app.use('/cityposts', citypostsRouter)
 app.use('/ct', ctRouter)
 app.use('/good', goodRouter)
 app.use('/ct_good', ct_goodRouter)
+app.use('/hotels', hotelsRouter)
